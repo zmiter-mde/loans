@@ -9,9 +9,9 @@ import java.util.List;
 
 public class LenderService {
 
-    private List<Lender> lenders;
+    protected List<Lender> lenders;
     protected LendersLoader lendersLoader;
-    private Double maxLoan;
+    protected Double maxLoan;
     private final String lendersFilename;
 
     public LenderService(String lendersFilename) {
@@ -51,6 +51,14 @@ public class LenderService {
 
     public List<Lender> getLenders() {
         return lenders;
+    }
+
+    protected void setLenders(List<Lender> lenders) {
+        this.lenders = lenders;
+    }
+
+    protected void setMaxLoan(double maxLoan) {
+        this.maxLoan = maxLoan;
     }
 
 }
