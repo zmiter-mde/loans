@@ -1,2 +1,2 @@
-java -jar target/loans-1.0-jar-with-dependencies.jar c:\market.csv 1000
+java -jar target/loans-1.0-jar-with-dependencies.jar market.csv 1000
 pause
