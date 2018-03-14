@@ -10,7 +10,6 @@ import java.util.ListIterator;
 
 import static com.mde.test.loans.util.Constants.ACCURACY;
 import static com.mde.test.loans.util.Constants.MONTHS_IN_YEAR;
-import static com.mde.test.loans.util.Constants.MONTHS_PERIOD;
 
 public class LoansCalculator {
 
@@ -62,21 +61,6 @@ public class LoansCalculator {
         double result = (r * p) / (1 - (Math.pow(1 + r, -n)));
         return Precision.round(result, ACCURACY);
     }
-
-    private double calculateMonthlyPayment3(double r, double p, int n) {
-        double result = (r * p) / (1 - Math.pow(Math.E, -n * Math.log(1 + r)));
-        return Precision.round(result, ACCURACY);
-    }
-
-    private double calculateMonthlyPayment2(double r, double p, int n) {
-        double k = Math.pow(1 + r, n);
-        double K = Precision.round(k, ACCURACY),
-               R = Precision.round(r, ACCURACY),
-               P = Precision.round(p, ACCURACY);
-        double result = (R * P * K) / (K - 1);
-        return Precision.round(result, ACCURACY);
-    }
-
 
     public double getRate() {
         double a = getTotalPayment(), p = requestedLoan;
