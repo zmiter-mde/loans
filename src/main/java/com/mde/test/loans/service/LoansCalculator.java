@@ -10,6 +10,7 @@ import java.util.ListIterator;
 
 import static com.mde.test.loans.util.Constants.ACCURACY;
 import static com.mde.test.loans.util.Constants.MONTHS_IN_YEAR;
+import static com.mde.test.loans.util.Constants.MONTHS_PERIOD;
 
 public class LoansCalculator {
 
@@ -58,13 +59,32 @@ public class LoansCalculator {
     * Taken from here https://en.wikipedia.org/wiki/Mortgage_calculator#Monthly_payment_formula
     * */
     private double calculateMonthlyPayment(double r, double p, int n) {
-        double result = (r * p) / (1 - (Math.pow(1 + r, -n)));
+        if (r == 0) {
+            return p / n;
+        }
+        double result = (r * p) / (1 - Math.pow(1 + r, -n));
         return Precision.round(result, ACCURACY);
     }
 
+    /*
+    * I have lost hope to find a formula, so god bless dichotomy
+    * */
     public double getRate() {
-        double a = getTotalPayment(), p = requestedLoan;
-        return 100 * MONTHS_IN_YEAR * (Math.pow(a / p, (double)1 / months) - 1);
+        double l = 0, r = 1, x = 0, current = 0, p = requestedLoan, eps = 0.00001;
+        int n = MONTHS_PERIOD;
+
+        while (Math.abs(calculateMonthlyPayment(r, p, n) -
+                        calculateMonthlyPayment(l, p, n)) > eps) {
+            x = (r + l) / 2;
+            current = calculateMonthlyPayment(x, p, n);
+            if (current - monthlyPayment > 0) {
+                r = x;
+            } else {
+                l = x;
+            }
+        }
+
+        return x * 12 * 100;
     }
 
     public List<Loan> getLoans() {
