@@ -31,7 +31,7 @@ public class LenderService {
         }
     }
 
-    private Double calculateMaxLoan() {
+    protected Double calculateMaxLoan() {
         double loan = 0;
 
         for (Lender lender : lenders) {
@@ -42,10 +42,10 @@ public class LenderService {
     }
 
     public boolean hasEnoughMoney(Integer requestedLoan) {
-        return maxLoan.compareTo(requestedLoan.doubleValue()) < 0;
+        return maxLoan.compareTo(requestedLoan.doubleValue()) > 0;
     }
 
-    private void orderLendersByRateAsc() {
+    protected void orderLendersByRateAsc() {
         lenders.sort(Comparator.comparing(Lender::getRate));
     }
 
@@ -59,6 +59,10 @@ public class LenderService {
 
     protected void setMaxLoan(double maxLoan) {
         this.maxLoan = maxLoan;
+    }
+
+    public double getMaxLoan() {
+        return maxLoan;
     }
 
 }

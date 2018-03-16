@@ -30,7 +30,7 @@ public class LendersLoader {
         return lenders;
     }
 
-    private CSVParser parseData() throws IOException {
+    public CSVParser parseData() throws IOException {
         Reader in = new FileReader(lendersFilename);
         return CSVFormat.DEFAULT
                 .withSkipHeaderRecord()

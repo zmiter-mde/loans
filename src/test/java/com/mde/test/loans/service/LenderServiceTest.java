@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.mde.test.loans.util.Constants.EPS;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -24,24 +25,17 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class LenderServiceTest {
-    /*
-        @InjectMocks
-        private LenderService lenderService;
 
-        @Mock
-        private LendersLoader lendersLoader;
-    */
-    private String filename;
+    @InjectMocks
+    private LenderService lenderService;
+
     private List<Lender> lenders;
 
     @Before
     public void setUp() {
-        MockitoAnnotations.initMocks(LenderService.class);
-        //lendersLoader = mock(LendersLoader.class);
-        //filename = "test.filename";
-        //lenders = initLenders();
-        //lenderService = new LenderService(filename);
-        //lenderService.setLenders(lenders);
+        MockitoAnnotations.initMocks(this);
+        lenders = initLenders();
+        lenderService.setLenders(lenders);
     }
 
     private List<Lender> initLenders() {
@@ -77,12 +71,24 @@ public class LenderServiceTest {
 
     @Test
     public void testHasEnoughMoney()  {
-        //System.out.println(lenderService.maxLoan);
-        /*
         lenderService.setMaxLoan(1500.0);
         assertTrue(lenderService.hasEnoughMoney(1000));
         assertFalse(lenderService.hasEnoughMoney(1501));
-        */
+    }
+
+    @Test
+    public void testOrderLendersByRateAsc() {
+        lenderService.orderLendersByRateAsc();
+        for (int i = 1; i < lenders.size(); ++i) {
+            assertTrue(lenders.get(i - 1).getRate() < lenders.get(i).getRate());
+        }
+    }
+
+    @Test
+    public void testCalculateMaxLoan() {
+        double maxLoan = 1500.0;
+        double actualMaxLoan = lenderService.calculateMaxLoan();
+        assertEquals(maxLoan, actualMaxLoan, EPS);
     }
 
 }

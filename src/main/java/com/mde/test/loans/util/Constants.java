@@ -2,6 +2,8 @@ package com.mde.test.loans.util;
 
 public class Constants {
 
+    public static final double EPS = 0.00001;
+
     public static final int MONTHS_PERIOD = 36;
     public static final int MONTHS_IN_YEAR = 12;
     public static final int ACCURACY = 13;

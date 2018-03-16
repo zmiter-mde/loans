@@ -8,9 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
-import static com.mde.test.loans.util.Constants.ACCURACY;
-import static com.mde.test.loans.util.Constants.MONTHS_IN_YEAR;
-import static com.mde.test.loans.util.Constants.MONTHS_PERIOD;
+import static com.mde.test.loans.util.Constants.*;
 
 public class LoansCalculator {
 
@@ -20,6 +18,12 @@ public class LoansCalculator {
     private double totalPayment;
     private double monthlyPayment;
 
+
+    // for tests with mockito
+    protected LoansCalculator() {
+        requestedLoan = 0;
+        months = 0;
+    }
 
     public LoansCalculator(double requestedLoan, int months, List<Lender> lenders) {
         this.requestedLoan = requestedLoan;
@@ -58,7 +62,7 @@ public class LoansCalculator {
     /*
     * Taken from here https://en.wikipedia.org/wiki/Mortgage_calculator#Monthly_payment_formula
     * */
-    private double calculateMonthlyPayment(double r, double p, int n) {
+    protected double calculateMonthlyPayment(double r, double p, int n) {
         if (r == 0) {
             return p / n;
         }
@@ -69,12 +73,12 @@ public class LoansCalculator {
     /*
     * I have lost hope to find a formula, so god bless dichotomy
     * */
-    public double getRate() {
-        double l = 0, r = 1, x = 0, current = 0, p = requestedLoan, eps = 0.00001;
+    public double getRate(double requestedLoan, double monthlyPayment) {
+        double l = 0, r = 1, x = 0, current = 0, p = requestedLoan;
         int n = MONTHS_PERIOD;
 
         while (Math.abs(calculateMonthlyPayment(r, p, n) -
-                        calculateMonthlyPayment(l, p, n)) > eps) {
+                        calculateMonthlyPayment(l, p, n)) > EPS) {
             x = (r + l) / 2;
             current = calculateMonthlyPayment(x, p, n);
             if (current - monthlyPayment > 0) {
@@ -84,7 +88,7 @@ public class LoansCalculator {
             }
         }
 
-        return x * 12 * 100;
+        return x * MONTHS_IN_YEAR * 100;
     }
 
     public List<Loan> getLoans() {
@@ -97,5 +101,9 @@ public class LoansCalculator {
 
     public double getMonthlyPayment() {
         return monthlyPayment;
+    }
+
+    public double getRequestedLoan() {
+        return requestedLoan;
     }
 }
